@@ -18,6 +18,9 @@ cloggers = []
 # Initialize an empty array for API calls
 api_urls = []
 
+# Error output string (Searching a name that doesn't exist etc)
+errorString = ""
+
 # Open the text file for reading
 file_path = os.path.join(script_directory, "cloggers.txt")
 with open(file_path, "r") as file:
@@ -39,6 +42,7 @@ for future in concurrent.futures.as_completed(futures):
         response_data = future.result()
         if "error" in response_data:
             print("API Error:", response_data["error"])
+            errorString += f"{response_data['error']}\n"
         else:
             #Add Account type and Log count to list
             clogger_object = {
@@ -54,15 +58,19 @@ for future in concurrent.futures.as_completed(futures):
 # Sort the "cloggers" array of objects by the "uniqueObtained" key in descending order
 sorted_data = sorted(cloggers, key=lambda x: x["uniqueObtained"], reverse=True)
 
-# Create count for 'Ranks'
+# Create counter for 'Ranks'
 count = 1
 # Create output string
 output_string = ""
 # Build formatted string, appending each users data by rank
 for data in sorted_data:
     individual_string = f"Rank {count} - {data['name']}: {data['uniqueObtained']}/{data['uniqueItems']} ({data['accountType']})\n---\n"
-    output_string = output_string + individual_string
+    output_string += individual_string
     count = count + 1
+
+#Attach any errors to the end of the output_string
+if errorString:
+    output_string += f"\n\n Errors:\n{errorString}"
 
 # print(output_string)
 
