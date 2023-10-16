@@ -51,6 +51,17 @@ for future in concurrent.futures.as_completed(futures):
                 "uniqueItems": response_data["collectionLog"]["uniqueItems"],
                 "uniqueObtained": response_data["collectionLog"]["uniqueObtained"]
             }
+            # Truncate account type to minimise output spilling onto new line, particularly on Discord mobile
+            match clogger_object["accountType"]:
+                case "IRONMAN":
+                    clogger_object["accountType"] = "IRONMAN"
+                case "GROUP_IRONMAN":
+                    clogger_object["accountType"] = "GIM"
+                case "ULTIMATE_IRONMAN":
+                    clogger_object["accountType"] = "UIM"
+                case _:
+                    clogger_object["accountType"] = "NORMAL"
+            # Append to list
             cloggers.append(clogger_object)
     except Exception as e:
         print(f"Error for {e}")
