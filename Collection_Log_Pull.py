@@ -55,8 +55,12 @@ for future in concurrent.futures.as_completed(futures):
             match clogger_object["accountType"]:
                 case "IRONMAN":
                     clogger_object["accountType"] = "IRONMAN"
+                case "HARDCORE_IRONMAN":
+                    clogger_object["accountType"] = "HC_IRONMAN"
                 case "GROUP_IRONMAN":
                     clogger_object["accountType"] = "GIM"
+                case "HARDCORE_GROUP_IRONMAN":
+                    clogger_object["accountType"] = "HC_GIM"
                 case "ULTIMATE_IRONMAN":
                     clogger_object["accountType"] = "UIM"
                 case _:
